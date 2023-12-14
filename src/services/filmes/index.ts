@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
 
-export function getUsuario(): Promise<AxiosResponse> {
+export function getFilmes(): Promise<AxiosResponse> {
 	return axios.get("http://localhost:3001/usuario", {
 		responseType: 'json',
 		headers: {
@@ -10,7 +10,7 @@ export function getUsuario(): Promise<AxiosResponse> {
 	})
 }
 
-export function createUsuario(body): Promise<AxiosResponse> {
+export function createFilmes(body: Filmes): Promise<AxiosResponse> {
 	return axios.post("http://localhost:3001/usuario", body, {
 		responseType: 'json',
 		headers: {
@@ -19,7 +19,7 @@ export function createUsuario(body): Promise<AxiosResponse> {
 	})
 }
 
-export function UpdateUsuario(body, id: number): Promise<AxiosResponse> {
+export function UpdateFilmes(body: Filmes, id: number): Promise<AxiosResponse> {
 	return axios.put(`http://localhost:3001/usuari/${id}`, body, {
 		responseType: 'json',
 		headers: {
@@ -28,7 +28,7 @@ export function UpdateUsuario(body, id: number): Promise<AxiosResponse> {
 	})
 }
 
-export function DeleteUsuario(id: number): Promise<AxiosResponse> {
+export function DeleteFilmes(id: number): Promise<AxiosResponse> {
 	return axios.delete(`http://localhost:3001/usuari/${id}`, {
 		responseType: 'json',
 		headers: {

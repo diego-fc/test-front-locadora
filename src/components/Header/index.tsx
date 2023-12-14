@@ -8,12 +8,9 @@ import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import MenuItem from "@mui/material/MenuItem";
-import Nav from "./components/Nav";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import { routeModule } from "next/dist/build/templates/app-page";
 import { useRouter } from 'next/navigation';
-import Link from "next/link";
 
 function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -26,11 +23,11 @@ function Header() {
     },
     {
       label: "Filmes",
-      onClick: () => router.push("/Filmes"),
+      onClick: () => router.push("/filmes"),
     },
     {
       label: "Locação",
-      onClick: () => router.push('/Locacao'),
+      onClick: () => router.push('/locacao'),
     },
   ];
 
@@ -51,7 +48,7 @@ function Header() {
 
   return (
     <AppBar>
-      <Container maxWidth="lg" data-testid="header">
+      <Container maxWidth={false} data-testid="header">
         <Toolbar disableGutters>
           <Button onClick={handleOpenUserMenu} style={{ color: "white" }}>
             Menu
@@ -81,10 +78,7 @@ function Header() {
                   handleCloseUserMenu();
                 }}
               >
-                <Link href="/usuario">
-                  test
-                </Link>
-                {/* <Typography textAlign="center">{menuItem.label}</Typography> */}
+                <Typography textAlign="center">{menuItem.label}</Typography>
               </MenuItem>
             ))}
           </Menu>
