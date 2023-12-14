@@ -18,7 +18,7 @@ export function createUsuario(body): Promise<AxiosResponse> {
 	})
 }
 
-export function UpdateUsuario(body, id: number): Promise<AxiosResponse> {
+export function updateUsuario(body, id: number): Promise<AxiosResponse> {
 	return axios.put(`http://localhost:3001/usuari/${id}`, body, {
 		responseType: 'json',
 		headers: {
@@ -27,7 +27,7 @@ export function UpdateUsuario(body, id: number): Promise<AxiosResponse> {
 	})
 }
 
-export function DeleteUsuario(id: number): Promise<AxiosResponse> {
+export function deleteUsuario(id: number): Promise<AxiosResponse> {
 	return axios.delete(`http://localhost:3001/usuari/${id}`, {
 		responseType: 'json',
 		headers: {

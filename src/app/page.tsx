@@ -1,4 +1,4 @@
-import Pages from '@/page/index.page'
+import Pages from '@/pages/index.page'
 
 export default function Home() {
   return (
