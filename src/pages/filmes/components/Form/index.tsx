@@ -4,28 +4,33 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-let usuarioScheme = yup.object({
-  email: yup.string().required(),
-  nome: yup.string().required(),
-  acesso: yup.string().required(),
+let filmScheme = yup.object({
+  titulo: yup.string().required(),
+  imagem: yup.string().required(),
+  sinopse: yup.string().required(),
+  elenco: yup.string().required(),
+  categoria: yup.string().required(),
+  valorLocacao: yup.number().required(),
+  quantidadeDisponivel: yup.number().required(),
+  anoLancamento: yup.number().required(),
 });
 
-interface UsuarioFormProps {
-  usuario: Usuario | undefined;
-  onSubmit: (usuario: Usuario) => void;
+interface FilmFormProps {
+  filme: Filmes | undefined;
+  onSubmit: (filme: Filmes) => void;
   onCancel: () => void;
   isLoading?: boolean;
   errors?: string[];
 }
 
-export default function UsuarioForm({
-  usuario,
+export default function FilmForm({
+  filme,
   onSubmit,
   onCancel,
   isLoading = false,
   errors = [],
-}: UsuarioFormProps) {
-  console.log("🚀 ~ file: index.tsx:28 ~ usuario:", usuario)
+}: FilmFormProps) {
+  console.log("🚀 ~ file: index.tsx:28 ~ filme:", filme)
   const {
     register,
     handleSubmit,
@@ -33,30 +38,30 @@ export default function UsuarioForm({
     reset,
     control,
   } = useForm({
-    resolver: yupResolver(usuarioScheme),
+    resolver: yupResolver(filmScheme),
   });
-  const acessoMock = [
-    { label: 'Usuario', acesso: "usuario" },
-    { label: 'Cliente', acesso: "cliente" },
-    { label: 'Diretor', acesso: "diretor" },
-    { label: 'Ator', acesso: "ator" }
+  const imagemMock = [
+    { label: 'Film', imagem: "usuario" },
+    { label: 'Cliente', imagem: "cliente" },
+    { label: 'Diretor', imagem: "diretor" },
+    { label: 'Ator', imagem: "ator" }
   ]
 
-  const handleFormSubmit = (newUsuarios: Usuario) => {
-    onSubmit(newUsuarios);
+  const handleFormSubmit = (newFilms: Filmes) => {
+    onSubmit(newFilms);
   };
 
   const handleCancel = () => {
-    reset({ email: "", nome: "" });
+    reset({ titulo: "", lancamento: "" });
     onCancel();
   };
 
   useEffect(() => {
-    reset(usuario);
-  }, [usuario, reset]);
+    reset(filme);
+  }, [filme, reset]);
 
   return (
-    <form style={{ width: "100%" }} onSubmit={handleSubmit(handleFormSubmit)} data-testid="usuario-form">
+    <form style={{ width: "100%" }} onSubmit={handleSubmit(handleFormSubmit)} data-testid="film-form">
       {errors.map((error) => (
         <Alert key={error} severity="error" style={{ marginBottom: 20 }}>
           {error}
@@ -76,55 +81,93 @@ export default function UsuarioForm({
         <Grid container spacing={2} marginBottom={2}>
           <Grid item md={4} xs={12}>
             <TextField
-              data-testid="email-input"
+              data-testid="titulo-input"
               fullWidth
-              label="E-mail"
+              label="Titulo"
               variant="outlined"
               size="small"
-              {...register("email")}
-              error={!!formErrors.email}
+              {...register("titulo")}
+              error={!!formErrors.titulo}
             />
           </Grid>
           <Grid item md={4} xs={12}>
             <TextField
-              data-testid="nome-input"
+              data-testid="imagem-input"
               fullWidth
-              label="Nome"
+              label="Imagem"
               variant="outlined"
               size="small"
-              {...register("nome")}
-              error={!!formErrors.nome}
+              {...register("imagem")}
+              error={!!formErrors.imagem}
             />
           </Grid>
           <Grid item md={4} xs={12}>
-          <Controller
-              control={control}
-              render={({ field: { value, ref, onChange, ...field } }) => (
-                <Autocomplete
-                  options={acessoMock}
-                  getOptionLabel={(option) => `${option.acesso}`}
-                  value={
-                    acessoMock?.findLast(
-                      (item) => item.acesso === value
-                    ) || null
-                  }
-                  renderInput={(params: any) => (
-                    <TextField
-                      {...params}
-                      {...field}
-                      label="Nivel de acesso"
-                      size="small"
-                      inputRef={ref}
-                      error={!!formErrors.acesso}
-                      variant="outlined"
-                    />
-                  )}
-                  onChange={(_: any, data: any) =>
-                    onChange(data?.acesso)
-                  }
-                />
-              )}
-              name="acesso"
+            <TextField
+              data-testid="sinopse-input"
+              fullWidth
+              label="Sinopse"
+              variant="outlined"
+              size="small"
+              {...register("sinopse")}
+              error={!!formErrors.sinopse}
+            />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <TextField
+              data-testid="elenco-input"
+              fullWidth
+              label="Elenco"
+              variant="outlined"
+              size="small"
+              {...register("elenco")}
+              error={!!formErrors.elenco}
+            />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <TextField
+              data-testid="categoria-input"
+              fullWidth
+              label="Categoria"
+              variant="outlined"
+              size="small"
+              {...register("categoria")}
+              error={!!formErrors.categoria}
+            />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <TextField
+              data-testid="valorLocacao-input"
+              fullWidth
+              type="number"
+              label="Valor da locação"
+              variant="outlined"
+              size="small"
+              {...register("valorLocacao")}
+              error={!!formErrors.valorLocacao}
+            />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <TextField
+              data-testid="quantidadeDisponivel-input"
+              fullWidth
+              type="number"
+              label="Quantidade"
+              variant="outlined"
+              size="small"
+              {...register("quantidadeDisponivel")}
+              error={!!formErrors.quantidadeDisponivel}
+            />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <TextField
+              data-testid="anoLancamento-input"
+              fullWidth
+              type="number"
+              label="Ano de lançamento"
+              variant="outlined"
+              size="small"
+              {...register("anoLancamento")}
+              error={!!formErrors.anoLancamento}
             />
           </Grid>
         </Grid>

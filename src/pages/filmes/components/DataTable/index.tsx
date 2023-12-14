@@ -4,41 +4,51 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 
 interface DataTableProps {
-  onEditUsuario: (id: number) => void;
-  onDeleteUsuario: (id: number) => void;
-  onViewUsuario: (id: number) => void;
+  onEditFilm: (id: number) => void;
+  onDeleteFilm: (id: number) => void;
+  onViewFilm: (id: number) => void;
   data: Usuario[];
   [x: string]: any;
 }
 export default function DataTable({
-  onEditUsuario,
-  onDeleteUsuario,
-  onViewUsuario,
+  onEditFilm,
+  onDeleteFilm,
+  onViewFilm,
   data,
 }: DataTableProps) {
   const columns: GridColDef[] = [
     {
-      field: "email",
-      headerName: "E-mail",
+      field: "titulo",
+      headerName: "Titulo",
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
     {
-      field: "nome",
-      headerName: "Nome",
+      field: "valorLocacao",
+      headerName: "Valor",
       headerClassName: 'super-app-theme--header',
       flex: 1,
+      renderCell: ({row}) => {
+        const formatedAmount = row?.valorLocacao?.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+        console.log("🚀 ~ file: index.tsx:41 ~ row:", row)
+        return <div>{`${formatedAmount}`}</div>
+      }
     },
     {
-      field: "acesso",
-      headerName: "Acesso",
+      field: "quantidadeDisponivel",
+      headerName: "Qtd Disponivel",
       headerClassName: 'super-app-theme--header',
       flex: 1,
+      renderCell: ({row}) => {
+        const text = row.quantidadeDisponivel < 2 ? "Unidate" : "unidades"
+        console.log("🚀 ~ file: index.tsx:41 ~ row:", row)
+        return <div>{`${row.quantidadeDisponivel} ${text}`}</div>
+      }
     },
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "Ações",
       headerClassName: 'super-app-theme--header',
       sortable: false,
       width: 160,
@@ -49,21 +59,21 @@ export default function DataTable({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={() => onEditUsuario(row.id)}
+            onClick={() => onEditFilm(row.id)}
             color="inherit"
           />,
           <GridActionsCellItem
             key={`delete-${row.id}`}
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => onDeleteUsuario(row.id)}
+            onClick={() => onDeleteFilm(row.id)}
             color="inherit"
           />,
           <GridActionsCellItem
             key={`view-${row.id}`}
             icon={<VisibilityIcon />}
             label="View"
-            onClick={() => onViewUsuario(row.id)}
+            onClick={() => onViewFilm(row.id)}
             color="inherit"
           />,
         ];

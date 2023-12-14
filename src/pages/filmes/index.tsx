@@ -1,40 +1,40 @@
 import { useEffect, useState } from "react";
-import { getUsuario, createUsuario, updateUsuario, deleteUsuario } from "@/services/usuarios/usuarios";
-import UsuarioForm from "./components/Form";
+import { getFilmes, createFilmes, deleteFilmes, updateFilmes } from "@/services/filmes";
+import FilmForm from "./components/Form";
 import DataTable from "./components/DataTable";
 import InfoView from "./components/InfoView";
 import { isAxiosError } from "axios";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
 import Pages from "../index.page";
 
-export default function Usuarios() {
-	const [usuarioId, setUsuarioId] = useState<number>();
-	const [usuario, setUsuario] = useState<Usuario>();
-	const [usuarioView, setUsuarioView] = useState<Usuario>();
+export default function Film() {
+	const [filmeId, setFilmeId] = useState<number>();
+	const [filme, setFilme] = useState<Filmes>();
+	const [filmeView, setFilmeView] = useState<Filmes>();
 	const [isSaving, setIsSaving] = useState<boolean>(false);
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 	const [modalInfoView, setModalInfoView] = useState<boolean>(false);
-	const [data, setData] = useState<Usuario[]>([]);
+	const [data, setData] = useState<Filmes[]>([]);
 	const [errors, setErrors] = useState([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const getUsers = async () => {
-		await getUsuario().then(({ data }) => {
+		await getFilmes().then(({ data }) => {
 			setData(data);
 		})
 	}
 
-	const handleDeleteUsuarioConfirmation = (id: number) => {
-		setUsuarioId(id);
+	const handleDeleteFilmConfirmation = (id: number) => {
+		setFilmeId(id);
 		setOpenDeleteModal(true);
 	};
 
-	const handleDeleteUsuario = async () => {
-		if (usuarioId) {
+	const handleDeleteFilm = async () => {
+		if (filmeId) {
 			try {
 				setIsSaving(true);
-				await deleteUsuario(usuarioId);
+				await deleteFilmes(filmeId);
 				getUsers()
 			} catch (err) { }
 			setIsSaving(false);
@@ -42,30 +42,34 @@ export default function Usuarios() {
 		}
 	};
 
-	const handleEditUsuario = (id: number) => {
-		const editUsuario = data.filter((item) => item.id === id);
-		if (editUsuario.length) {
-			const { id, email, nome, acesso, } = editUsuario[0];
-			setUsuario({ id, email, nome, acesso });
+	const handleEditFilm = (id: number) => {
+		const editFilm = data.filter((item) => item.id === id);
+		if (editFilm.length) {
+			const { id, titulo, anoLancamento, categoria, elenco, imagem, quantidadeDisponivel, sinopse, valorLocacao } = editFilm[0];
+			setFilme({ id, titulo, anoLancamento, categoria, elenco, imagem, quantidadeDisponivel, sinopse, valorLocacao });
 			setModalOpen(true);
 		}
 	};
 
-	const handleFormSubmit = async (newUsuario: Usuario) => {
-		const usuarioDto = {
-			email: newUsuario.email,
-			nome: newUsuario.nome,
-			acesso: newUsuario.acesso
+	const handleFormSubmit = async (newFilm: Filmes) => {
+		const filmeDto = {
+			titulo: newFilm.titulo,
+			imagem: newFilm.imagem,
+			sinopse: newFilm.sinopse,
+			elenco: newFilm.elenco,
+			categoria: newFilm.categoria,
+			valorLocacao: newFilm.valorLocacao,
+			quantidadeDisponivel: newFilm.quantidadeDisponivel,
+			anoLancamento: newFilm.anoLancamento
 		}
-		console.log("🚀 ~ file: index.tsx:53 ~ handleFormSubmit ~ usuarioDto:", usuarioDto)
 
 		try {
 			setIsSaving(true);
-			if (newUsuario.id) {
-				await updateUsuario(usuarioDto, newUsuario.id);
+			if (newFilm.id) {
+				await updateFilmes(filmeDto, newFilm.id);
 				getUsers()
 			} else {
-				await createUsuario(usuarioDto);
+				await createFilmes(filmeDto);
 				getUsers()
 			}
 			setModalOpen(false);
@@ -79,13 +83,13 @@ export default function Usuarios() {
 		setIsSaving(false);
 	};
 
-	const handleCancelEditUsuario = () => {
-		setUsuario({} as Usuario);
+	const handleCancelEditFilm = () => {
+		setFilme({} as Filmes);
 		setErrors([]);
 		setModalOpen(false);
 	};
 
-	const handleCancelViewUsuario = () => {
+	const handleCancelViewFilm = () => {
 		setModalInfoView(false);
 	};
 
@@ -105,7 +109,7 @@ export default function Usuarios() {
 				<Grid
 					marginTop={4}
 					item xs={10} >
-					<Typography variant="h5">Usuários</Typography>
+					<Typography variant="h5">Filmes</Typography>
 				</Grid>
 				{!modalOpen && !modalInfoView ?
 					<Grid item xs={2}>
@@ -113,7 +117,7 @@ export default function Usuarios() {
 							variant="contained"
 							onClick={() => setModalOpen(true)}
 						>
-							Novo usuário
+							Novo filme
 						</Button>
 					</Grid> :
 					null
@@ -121,10 +125,10 @@ export default function Usuarios() {
 			</Grid>
 			{modalOpen ?
 				<Grid cotainer={true} alignItems="center">
-					<UsuarioForm
+					<FilmForm
 						onSubmit={handleFormSubmit}
-						usuario={usuario}
-						onCancel={handleCancelEditUsuario}
+						filme={filme}
+						onCancel={handleCancelEditFilm}
 						isLoading={isSaving}
 						errors={errors}
 					/>
@@ -134,8 +138,8 @@ export default function Usuarios() {
 			{modalInfoView && !modalOpen ?
 				<Grid container alignItems="center">
 					<InfoView
-						usuario={usuarioView}
-						onCancel={handleCancelViewUsuario}
+						filme={filmeView}
+						onCancel={handleCancelViewFilm}
 						isLoading={isSaving}
 						errors={errors}
 					/>
@@ -146,12 +150,12 @@ export default function Usuarios() {
 				<DataTable
 					loading={isLoading}
 					data={data}
-					onDeleteUsuario={handleDeleteUsuarioConfirmation}
-					onEditUsuario={handleEditUsuario}
-					onViewUsuario={(id: string | number) => {
+					onDeleteFilm={handleDeleteFilmConfirmation}
+					onEditFilm={handleEditFilm}
+					onViewFilm={(id: string | number) => {
 						setErrors([]);
-						setUsuarioView(
-							data.findLast((item) => item.id === id) || ({} as Usuario)
+						setFilmeView(
+							data.findLast((item) => item.id === id) || ({} as Filmes)
 						);
 						setModalInfoView(true);
 					}}
@@ -170,15 +174,15 @@ export default function Usuarios() {
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
 			>
-				<DialogTitle id="alert-dialog-title">Deletar usuario</DialogTitle>
+				<DialogTitle id="alert-dialog-title">Deletar filme</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-description">
-						Tem certeza que quer deletar esse usuario?
+						Tem certeza que quer deletar esse filme?
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={() => setOpenDeleteModal(false)}>Cancel</Button>
-					<Button onClick={handleDeleteUsuario}>Confirm</Button>
+					<Button onClick={handleDeleteFilm}>Confirm</Button>
 				</DialogActions>
 			</Dialog>
 		</Grid >)

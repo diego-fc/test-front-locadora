@@ -38,7 +38,7 @@ export default function DataTable({
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "Ações",
       headerClassName: 'super-app-theme--header',
       sortable: false,
       width: 160,
