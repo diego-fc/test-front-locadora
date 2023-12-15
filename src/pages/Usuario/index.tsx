@@ -10,7 +10,7 @@ import Pages from "../index.page";
 export default function Usuarios() {
 	const [usuarioId, setUsuarioId] = useState<number>();
 	const [usuario, setUsuario] = useState<Usuario>();
-	const [usuarioView, setUsuarioView] = useState<Usuario>();
+	const [usuarioView, setUsuarioView] = useState<Usuario>({} as Usuario);
 	const [isSaving, setIsSaving] = useState<boolean>(false);
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -70,9 +70,6 @@ export default function Usuarios() {
 			setModalOpen(false);
 			setIsSaving(false);
 		} catch (err: unknown) {
-			if (isAxiosError(err)) {
-				setErrors([err.response?.data?.message]);
-			}
 			setIsSaving(false);
 		}
 		setIsSaving(false);
@@ -119,7 +116,7 @@ export default function Usuarios() {
 				}
 			</Grid>
 			{modalOpen ?
-				<Grid cotainer={true} alignItems="center">
+				<Grid container={true} alignItems="center">
 					<UsuarioForm
 						onSubmit={handleFormSubmit}
 						usuario={usuario}

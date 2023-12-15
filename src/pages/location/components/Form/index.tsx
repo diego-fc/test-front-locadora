@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Alert, Autocomplete, Button, FormControlLabel, Grid, Radio, RadioGroup, Switch, TextField } from "@mui/material";
+import { Alert, Autocomplete, Button, Grid, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider, TimeField } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { parseISO } from "date-fns";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-let filmScheme = yup.object({
+let locationScheme = yup.object({
   locadorId: yup.number().required(),
   filmeId: yup.number().required(),
   dataRetirada: yup.string().required(),
@@ -18,11 +18,11 @@ let filmScheme = yup.object({
   situacao: yup.string().required(),
 });
 
-interface FilmFormProps {
-  filme: Filmes[];
+interface locationFormProps {
   location: Locations | undefined;
+  filme: Filmes[];
   usuarios: Usuario[];
-  onSubmit: (filme: Filmes) => void;
+  onSubmit: (location: Locations) => void;
   onCancel: () => void;
   isLoading?: boolean;
   errors?: string[];
@@ -36,18 +36,16 @@ export default function FilmForm({
   onCancel,
   isLoading = false,
   errors = [],
-}: FilmFormProps) {
-  console.log("🚀 ~ file: index.tsx:39 ~ location:", location)
+}: locationFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors: formErrors },
     reset,
     control,
-    watch,
     setValue
   } = useForm({
-    resolver: yupResolver(filmScheme),
+    resolver: yupResolver(locationScheme),
   });
 
   const situationMock = [
@@ -56,21 +54,22 @@ export default function FilmForm({
     { label: 'Entregue', description: "entregue" },
   ]
 
-  const handleFormSubmit = (newFilms: Filmes) => {
-    onSubmit(newFilms);
+  const handleFormSubmit = (newLocation: Locations) => {
+    onSubmit(newLocation);
   };
 
   const handleCancel = () => {
-    reset({ dataRetirada: "", dataDevolucao: "", horaLimiteDevolucao: "", situacao: "" });
+    reset({ situacao: "" });
     onCancel();
   };
+
   useEffect(() => {
     reset(location);
   }, [location, reset]);
 
   return (
     <form
-    onSubmit={handleSubmit(handleFormSubmit)} data-testid="location-form">
+      onSubmit={handleSubmit(handleFormSubmit)} data-testid="location-form">
       {errors.map((error) => (
         <Alert key={error} severity="error" style={{ marginBottom: 20 }}>
           {error}
@@ -158,7 +157,9 @@ export default function FilmForm({
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 onChange={(newValue) => {
-                  setValue("dataRetirada", new Date(newValue).toISOString())
+                  if (newValue !== null) {
+                    setValue("dataRetirada", new Date(newValue).toISOString());
+                  }
                 }}
                 label={"Data de retirada"}
                 value={location ? parseISO(location?.dataRetirada) : null}
@@ -173,7 +174,9 @@ export default function FilmForm({
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 onChange={(newValue) => {
-                  setValue("dataDevolucao", new Date(newValue).toISOString())
+                  if (newValue !== null) {
+                    setValue("dataRetirada", new Date(newValue).toISOString());
+                  }
                 }}
                 label={"Data de devolução"}
                 value={location ? parseISO(location?.dataDevolucao) : null}
@@ -187,7 +190,11 @@ export default function FilmForm({
           <Grid item md={4} xs={12}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <TimeField
-                onChange={(newValue) => setValue("horaLimiteDevolucao", newValue)}
+                onChange={(newValue) => {
+                  if (newValue !== null) {
+                    setValue("dataRetirada", new Date(newValue).toISOString());
+                  }
+                }}
                 label="Hora limite para devolução"
                 value={location ? parseISO(location?.horaLimiteDevolucao) : null}
                 format="HH:mm"

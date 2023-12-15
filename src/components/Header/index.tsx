@@ -34,7 +34,7 @@ function Header() {
   const menuItem = [
     {
       label: "Logout",
-      onClick: null,
+      onClick: () => router.push('/'),
     },
   ];
 

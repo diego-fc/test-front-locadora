@@ -1,41 +1,39 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, FormControlLabel, Grid, Switch, TextField } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { Airport } from "../../../../../types/airport";
-
-let airportScheme = yup.object({
-  SIGLA_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  ATIVO: yup.boolean().notRequired(),
+const usuarioScheme = yup.object({
+  email: yup.string().required(),
+  nome: yup.string().required(),
+  acesso: yup.string().required(),
 });
 
-interface airportFormProps {
-  airport: Airport;
+interface usuarioFormProps {
+  usuario: Usuario;
   onCancel: () => void;
   isLoading?: boolean;
   errors?: string[];
 }
 
 export default function InfoView({
-  airport,
+  usuario,
   onCancel,
   isLoading = false,
-}: airportFormProps) {
+}: usuarioFormProps) {
   const {
     register,
     control,
     formState: { errors: formErrors },
     reset,
   } = useForm({
-    resolver: yupResolver(airportScheme),
+    resolver: yupResolver(usuarioScheme),
   });
 
   useEffect(() => {
-    reset(airport);
-  }, [airport, reset]);
+    reset(usuario);
+  }, [usuario, reset]);
 
   const handleCancel = () => {
     onCancel();
@@ -43,7 +41,7 @@ export default function InfoView({
 
   return (
     <>
-      <form data-testid="airport-view" style={{ width: "100%" }}>
+      <form data-testid="usuario-view" style={{ width: "100%" }}>
         <Grid
           data-testid="search"
           container
@@ -57,7 +55,7 @@ export default function InfoView({
           borderRadius={2}
           alignItems="center"
         >
-          <Grid item md={2} xs={4}>
+        <Grid item md={4} xs={12}>
             <Controller
               control={control}
               render={({ field: { value } }) => (
@@ -65,17 +63,17 @@ export default function InfoView({
                   fullWidth
                   disabled
                   type="text"
-                  label="Abbreviation"
+                  label="E-mail"
                   size="small"
-                  error={!!formErrors.SIGLA_AEROPORTO}
+                  error={!!formErrors.email}
                   InputLabelProps={{ shrink: !!value }}
-                  {...register("SIGLA_AEROPORTO")}
+                  {...register("email")}
                 />
               )}
-              name="SIGLA_AEROPORTO"
+              name="email"
             />
           </Grid>
-          <Grid item md={8} xs={8}>
+          <Grid item md={4} xs={12}>
             <Controller
               control={control}
               render={({ field: { value } }) => (
@@ -83,37 +81,38 @@ export default function InfoView({
                   fullWidth
                   type="text"
                   disabled
-                  label="Description"
+                  label="Nome"
                   variant="outlined"
                   size="small"
                   defaultValue={value}
                   value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
+                  error={!!formErrors.nome}
                   InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
+                  {...register("nome")}
                 />
               )}
-              name="DSC_AEROPORTO"
+              name="nome"
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item md={4} xs={12}>
             <Controller
+              control={control}
               render={({ field: { value } }) => (
-                <FormControlLabel
-                  control={
-                    <Switch
-                      disabled
-                      checked={!!value}
-                      inputProps={{ "aria-label": "controlled" }}
-                      {...register("ATIVO")}
-                    />
-                  }
-                  labelPlacement="start"
-                  label="Status"
+                <TextField
+                  fullWidth
+                  type="text"
+                  disabled
+                  label="Nivel de acesso"
+                  variant="outlined"
+                  size="small"
+                  defaultValue={value}
+                  value={value}
+                  error={!!formErrors.acesso}
+                  InputLabelProps={{ shrink: !!value }}
+                  {...register("acesso")}
                 />
               )}
-              name="ATIVO"
-              control={control}
+              name="acesso"
             />
           </Grid>
           <Grid
@@ -123,7 +122,7 @@ export default function InfoView({
             marginTop={4}>
             <Grid>
               <Button
-                data-testid="airport-cancel"
+                data-testid="usuario-cancel"
                 variant="contained"
                 onClick={handleCancel}
                 disabled={isLoading}

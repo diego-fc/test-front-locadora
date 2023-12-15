@@ -17,7 +17,7 @@ export default function DataTable({
   onEditLocation,
   onDeleteLocation,
   onViewLocation,
-  data,
+  data = [],
   usuarios,
   filmes
 }: DataTableProps) {

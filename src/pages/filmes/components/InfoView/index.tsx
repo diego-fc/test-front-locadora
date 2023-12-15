@@ -4,38 +4,41 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { Airport } from "../../../../../types/airport";
-
-let airportScheme = yup.object({
-  SIGLA_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  ATIVO: yup.boolean().notRequired(),
+let filmeScheme = yup.object({
+  titulo: yup.string().notRequired(),
+  imagem: yup.string().notRequired(),
+  sinopse: yup.string().notRequired(),
+  elenco: yup.string().notRequired(),
+  categoria: yup.string().notRequired(),
+  valorLocacao: yup.number().notRequired(),
+  quantidadeDisponivel: yup.number().notRequired(),
+  anoLancamento: yup.number().notRequired(),
 });
 
-interface airportFormProps {
-  airport: Airport;
+interface filmeFormProps {
+  filme: Filmes | undefined;
   onCancel: () => void;
   isLoading?: boolean;
   errors?: string[];
 }
 
 export default function InfoView({
-  airport,
+  filme,
   onCancel,
   isLoading = false,
-}: airportFormProps) {
+}: filmeFormProps) {
   const {
     register,
     control,
     formState: { errors: formErrors },
     reset,
   } = useForm({
-    resolver: yupResolver(airportScheme),
+    resolver: yupResolver(filmeScheme),
   });
 
   useEffect(() => {
-    reset(airport);
-  }, [airport, reset]);
+    reset(filme);
+  }, [filme, reset]);
 
   const handleCancel = () => {
     onCancel();
@@ -43,78 +46,121 @@ export default function InfoView({
 
   return (
     <>
-      <form data-testid="airport-view" style={{ width: "100%" }}>
+      <form data-testid="filme-view" style={{ width: "100%" }}>
         <Grid
           data-testid="search"
           container
-          spacing={2}
           marginTop={1}
           border={1}
           paddingTop={2}
           paddingRight={2}
+          paddingLeft={2}
           paddingBottom={2}
           borderColor={"#7b7b7b"}
           borderRadius={2}
           alignItems="center"
         >
-          <Grid item md={2} xs={4}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  disabled
-                  type="text"
-                  label="Abbreviation"
-                  size="small"
-                  error={!!formErrors.SIGLA_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("SIGLA_AEROPORTO")}
-                />
-              )}
-              name="SIGLA_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
-                  disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
-                />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Controller
-              render={({ field: { value } }) => (
-                <FormControlLabel
-                  control={
-                    <Switch
-                      disabled
-                      checked={!!value}
-                      inputProps={{ "aria-label": "controlled" }}
-                      {...register("ATIVO")}
-                    />
-                  }
-                  labelPlacement="start"
-                  label="Status"
-                />
-              )}
-              name="ATIVO"
-              control={control}
-            />
+
+          <Grid container spacing={2} marginBottom={2}>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="titulo-input"
+                fullWidth
+                label="Titulo"
+                variant="outlined"
+                size="small"
+                {...register("titulo")}
+                error={!!formErrors.titulo}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="imagem-input"
+                fullWidth
+                label="Imagem"
+                variant="outlined"
+                size="small"
+                {...register("imagem")}
+                error={!!formErrors.imagem}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="sinopse-input"
+                fullWidth
+                label="Sinopse"
+                variant="outlined"
+                size="small"
+                {...register("sinopse")}
+                error={!!formErrors.sinopse}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="elenco-input"
+                fullWidth
+                label="Elenco"
+                variant="outlined"
+                size="small"
+                {...register("elenco")}
+                error={!!formErrors.elenco}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="categoria-input"
+                fullWidth
+                label="Categoria"
+                variant="outlined"
+                size="small"
+                {...register("categoria")}
+                error={!!formErrors.categoria}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="valorLocacao-input"
+                fullWidth
+                type="number"
+                label="Valor da locação"
+                variant="outlined"
+                size="small"
+                {...register("valorLocacao")}
+                error={!!formErrors.valorLocacao}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="quantidadeDisponivel-input"
+                fullWidth
+                type="number"
+                label="Quantidade"
+                variant="outlined"
+                size="small"
+                {...register("quantidadeDisponivel")}
+                error={!!formErrors.quantidadeDisponivel}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="anoLancamento-input"
+                fullWidth
+                type="number"
+                label="Ano de lançamento"
+                variant="outlined"
+                size="small"
+                {...register("anoLancamento")}
+                error={!!formErrors.anoLancamento}
+              />
+            </Grid>
           </Grid>
           <Grid
             container
@@ -123,7 +169,7 @@ export default function InfoView({
             marginTop={4}>
             <Grid>
               <Button
-                data-testid="airport-cancel"
+                data-testid="filme-cancel"
                 variant="contained"
                 onClick={handleCancel}
                 disabled={isLoading}

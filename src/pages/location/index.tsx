@@ -104,9 +104,6 @@ export default function Location() {
 			setModalOpen(false);
 			setIsSaving(false);
 		} catch (err: unknown) {
-			if (isAxiosError(err)) {
-				setErrors([err.response?.data?.message]);
-			}
 			setIsSaving(false);
 		}
 		setIsSaving(false);
@@ -153,7 +150,7 @@ export default function Location() {
 				}
 			</Grid>
 			{modalOpen ?
-				<Grid cotainer={true} alignItems="center">
+				<Grid container={true} alignItems="center">
 					<LocationForm
 						location={location}
 						filme={filmes}
@@ -170,6 +167,8 @@ export default function Location() {
 				<Grid container alignItems="center">
 					<InfoView
 						location={locationView}
+						filme={filmes}
+						usuarios={usuarios}
 						onCancel={handleCancelViewLocation}
 						isLoading={isSaving}
 						errors={errors}

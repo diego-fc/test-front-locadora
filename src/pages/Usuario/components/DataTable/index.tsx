@@ -14,7 +14,7 @@ export default function DataTable({
   onEditUsuario,
   onDeleteUsuario,
   onViewUsuario,
-  data,
+  data = [],
 }: DataTableProps) {
   const columns: GridColDef[] = [
     {

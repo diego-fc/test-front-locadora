@@ -7,14 +7,14 @@ interface DataTableProps {
   onEditFilm: (id: number) => void;
   onDeleteFilm: (id: number) => void;
   onViewFilm: (id: number) => void;
-  data: Usuario[];
+  data: Filmes[];
   [x: string]: any;
 }
 export default function DataTable({
   onEditFilm,
   onDeleteFilm,
   onViewFilm,
-  data,
+  data = [],
 }: DataTableProps) {
   const columns: GridColDef[] = [
     {

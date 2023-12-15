@@ -74,10 +74,7 @@ export default function Film() {
 			}
 			setModalOpen(false);
 			setIsSaving(false);
-		} catch (err: unknown) {
-			if (isAxiosError(err)) {
-				setErrors([err.response?.data?.message]);
-			}
+		} catch (err) {
 			setIsSaving(false);
 		}
 		setIsSaving(false);
@@ -124,7 +121,7 @@ export default function Film() {
 				}
 			</Grid>
 			{modalOpen ?
-				<Grid cotainer={true} alignItems="center">
+				<Grid container alignItems="center">
 					<FilmForm
 						onSubmit={handleFormSubmit}
 						filme={filme}

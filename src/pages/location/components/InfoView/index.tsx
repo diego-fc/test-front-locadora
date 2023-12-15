@@ -1,228 +1,203 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, FormControlLabel, Grid, Switch, TextField } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { DatePicker, LocalizationProvider, TimeField } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { parseISO } from "date-fns";
 
-let airportScheme = yup.object({
-  locadorId: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
-  DSC_AEROPORTO: yup.string().required(),
+let locationScheme = yup.object({
+  locadorId: yup.number().notRequired(),
+  filmeId: yup.number().notRequired(),
+  dataRetirada: yup.string().notRequired(),
+  dataDevolucao: yup.string().notRequired(),
+  horaLimiteDevolucao: yup.string().notRequired(),
+  valorMultaAtraso: yup.number().notRequired(),
+  valorTotal: yup.number().notRequired(),
+  situacao: yup.string().notRequired(),
 });
 
-interface airportFormProps {
-  location: Locations;
+interface locationFormProps {
+  location: Locations | undefined;
+  usuarios: Usuario[];
+  filme: Filmes[];
   onCancel: () => void;
   isLoading?: boolean;
   errors?: string[];
 }
 
 export default function InfoView({
-  airport,
+  location,
+  usuarios,
+  filme,
   onCancel,
   isLoading = false,
-}: airportFormProps) {
+}: locationFormProps) {
+  const [newUser, setNewUser] = useState<Usuario>()
+  const [newFilms, setNewFilms] = useState<Filmes>()
   const {
     register,
     control,
     formState: { errors: formErrors },
     reset,
+    setValue
   } = useForm({
-    resolver: yupResolver(airportScheme),
+    resolver: yupResolver(locationScheme),
   });
 
   useEffect(() => {
-    reset(airport);
-  }, [airport, reset]);
+    reset(location);
+  }, [location, reset]);
 
   const handleCancel = () => {
     onCancel();
   };
 
+  useEffect(() => {
+    const findUser = usuarios.find((item) =>
+      item.id === location?.locadorId
+    )
+    const findFilms = filme.find((item) =>
+      item.id === location?.filmeId
+    )
+    setNewUser(findUser);
+    setNewFilms(findFilms);
+  }, [filme, usuarios])
+
   return (
     <>
-      <form data-testid="airport-view" style={{ width: "100%" }}>
+      <form data-testid="location-view" style={{ width: "100%" }}>
         <Grid
           data-testid="search"
           container
-          spacing={2}
           marginTop={1}
           border={1}
-          paddingTop={2}
-          paddingRight={2}
-          paddingBottom={2}
+          padding={2}
           borderColor={"#7b7b7b"}
           borderRadius={2}
           alignItems="center"
         >
-          <Grid item md={2} xs={4}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
+          <Grid container spacing={2} marginBottom={2}>
+            <Grid item md={4} xs={12}>
+              <Controller
+                control={control}
+                render={({ field: { value, ref, onChange, ...field } }) => (
+                  <TextField
+                    disabled
+                    fullWidth
+                    label="Locador"
+                    value={newUser?.nome}
+                    size="small"
+                    inputRef={ref}
+                    error={!!formErrors.locadorId}
+                    variant="outlined"
+                  />
+                )}
+                name="locadorId"
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <Controller
+                control={control}
+                render={({ field: { value, ref, onChange, ...field } }) => (
+                  <TextField
+                    disabled
+                    fullWidth
+                    label="Filme"
+                    size="small"
+                    value={newFilms?.titulo}
+                    inputRef={ref}
+                    error={!!formErrors.filmeId}
+                    variant="outlined"
+                  />
+                )}
+                name="filmeId"
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
                   disabled
-                  type="text"
-                  label="Abbreviation"
-                  size="small"
-                  error={!!formErrors.locadorId}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("locadorId")}
+
+                  label={"Data de retirada"}
+                  value={location ? parseISO(location?.dataRetirada) : null}
+                  name={"dataRetirada"}
+                  format="dd/MM/yyyy"
+                  minDate={new Date()}
+                  slotProps={{ textField: { size: 'small', fullWidth: true } }}
                 />
-              )}
-              name="locadorId"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
+              </LocalizationProvider>
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
                   disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
+
+                  label={"Data de devolução"}
+                  value={location ? parseISO(location?.dataDevolucao) : null}
+                  name={"dataDevolucao"}
+                  format="dd/MM/yyyy"
+                  minDate={new Date()}
+                  slotProps={{ textField: { size: 'small', fullWidth: true } }}
                 />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
+              </LocalizationProvider>
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <TimeField
                   disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
+                  label="Hora limite para devolução"
+                  value={location ? parseISO(location?.horaLimiteDevolucao) : null}
+                  format="HH:mm"
+                  name="horaLimiteDevolucao"
+                  slotProps={{ textField: { size: 'small', fullWidth: true } }}
                 />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
-                  disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
-                />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
-                  disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
-                />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
-                  disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
-                />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
-                  disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
-                />
-              )}
-              name="DSC_AEROPORTO"
-            />
-          </Grid>
-          <Grid item md={8} xs={8}>
-            <Controller
-              control={control}
-              render={({ field: { value } }) => (
-                <TextField
-                  fullWidth
-                  type="text"
-                  disabled
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  defaultValue={value}
-                  value={value}
-                  error={!!formErrors.DSC_AEROPORTO}
-                  InputLabelProps={{ shrink: !!value }}
-                  {...register("DSC_AEROPORTO")}
-                />
-              )}
-              name="DSC_AEROPORTO"
-            />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="valorMultaAtraso-input"
+                fullWidth
+                label="Multa por atraso"
+                variant="outlined"
+                size="small"
+                {...register("valorMultaAtraso")}
+                error={!!formErrors.valorMultaAtraso}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                disabled
+                data-testid="valorTotal-input"
+                fullWidth
+                type="number"
+                label="Total"
+                variant="outlined"
+                size="small"
+                {...register("valorTotal")}
+                error={!!formErrors.valorTotal}
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <Controller
+                control={control}
+                render={({ field: { value, ref, onChange, ...field } }) => (
+                  <TextField
+                    fullWidth
+                    disabled
+                    label="Situação"
+                    size="small"
+                    inputRef={ref}
+                    {...register("situacao")}
+                    error={!!formErrors.situacao}
+                    variant="outlined"
+                  />
+                )}
+                name="situacao"
+              />
+            </Grid>
           </Grid>
           <Grid
             container
@@ -231,7 +206,7 @@ export default function InfoView({
             marginTop={4}>
             <Grid>
               <Button
-                data-testid="airport-cancel"
+                data-testid="location-cancel"
                 variant="contained"
                 onClick={handleCancel}
                 disabled={isLoading}
