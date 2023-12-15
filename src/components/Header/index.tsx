@@ -27,14 +27,14 @@ function Header() {
     },
     {
       label: "Locação",
-      onClick: () => router.push('/locacao'),
+      onClick: () => router.push('/location'),
     },
   ];
 
   const menuItem = [
     {
       label: "Logout",
-      onClick: () => console.log("foi"),
+      onClick: null,
     },
   ];
 
@@ -48,8 +48,8 @@ function Header() {
 
   return (
     <AppBar>
-      <Container maxWidth={false} data-testid="header">
-        <Toolbar disableGutters>
+      <Container  maxWidth={false} style={{padding: 0}} data-testid="header">
+        <Toolbar disableGutters style={{justifyContent: "space-between"}}>
           <Button onClick={handleOpenUserMenu} style={{ color: "white" }}>
             Menu
           </Button>
@@ -82,7 +82,7 @@ function Header() {
               </MenuItem>
             ))}
           </Menu>
-          <Box sx={{ flexGrow: 0 }} data-testid="user-info-header">
+          <Box sx={{ flexGrow: 0, padding: 1 }} data-testid="user-info-header">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar alt="Remy Sharp" />
             </IconButton>

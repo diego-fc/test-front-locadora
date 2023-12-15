@@ -2,45 +2,67 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
+import { format } from "date-fns";
 
 interface DataTableProps {
-  onEditFilm: (id: number) => void;
-  onDeleteFilm: (id: number) => void;
-  onViewFilm: (id: number) => void;
-  data: Usuario[];
+  onEditLocation: (id: number) => void;
+  onDeleteLocation: (id: number) => void;
+  onViewLocation: (id: number) => void;
+  data: Locations[];
+  usuarios: Usuario[];
+  filmes: Filmes[];
   [x: string]: any;
 }
 export default function DataTable({
-  onEditFilm,
-  onDeleteFilm,
-  onViewFilm,
+  onEditLocation,
+  onDeleteLocation,
+  onViewLocation,
   data,
+  usuarios,
+  filmes
 }: DataTableProps) {
   const columns: GridColDef[] = [
     {
-      field: "titulo",
-      headerName: "Titulo",
+      field: "locadorId",
+      headerName: "Locador",
       headerClassName: 'super-app-theme--header',
       flex: 1,
-    },
-    {
-      field: "valorLocacao",
-      headerName: "Valor",
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-      renderCell: ({row}) => {
-        const formatedAmount = row?.valorLocacao?.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-        return <div>{`${formatedAmount}`}</div>
+      renderCell: ({ row }) => {
+        const filtered = usuarios?.find(item => {
+          return item.id === row.locadorId
+        })
+        return <div>{`${filtered?.nome}`}</div>
       }
     },
     {
-      field: "quantidadeDisponivel",
-      headerName: "Qtd Disponivel",
+      field: "filmeId",
+      headerName: "Filme",
       headerClassName: 'super-app-theme--header',
       flex: 1,
-      renderCell: ({row}) => {
-        const text = row.quantidadeDisponivel < 2 ? "Unidate" : "unidades"
-        return <div>{`${row.quantidadeDisponivel} ${text}`}</div>
+      renderCell: ({ row }) => {
+        const filtered = filmes?.find(item => {
+          return item.id === row.filmeId
+        })
+        return <div>{`${filtered?.titulo}`}</div>
+      }
+    },
+    {
+      field: "dataDevolucao",
+      headerName: "Devolução",
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+      renderCell: ({ row }) => {
+        const formatDate = format(new Date(row.horaLimiteDevolucao), 'dd/MM/yyyy, p')
+        return <div>{`${formatDate}`}</div>
+      }
+    },
+    {
+      field: "situacao",
+      headerName: "Situação",
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+      renderCell: ({ row }) => {
+        return <div>{`${row.situacao.toUpperCase()}`}</div>
       }
     },
     {
@@ -57,21 +79,21 @@ export default function DataTable({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={() => onEditFilm(row.id)}
+            onClick={() => onEditLocation(row.id)}
             color="inherit"
           />,
           <GridActionsCellItem
             key={`delete-${row.id}`}
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => onDeleteFilm(row.id)}
+            onClick={() => onDeleteLocation(row.id)}
             color="inherit"
           />,
           <GridActionsCellItem
             key={`view-${row.id}`}
             icon={<VisibilityIcon />}
             label="View"
-            onClick={() => onViewFilm(row.id)}
+            onClick={() => onViewLocation(row.id)}
             color="inherit"
           />,
         ];

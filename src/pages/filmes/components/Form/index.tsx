@@ -30,7 +30,6 @@ export default function FilmForm({
   isLoading = false,
   errors = [],
 }: FilmFormProps) {
-  console.log("🚀 ~ file: index.tsx:28 ~ filme:", filme)
   const {
     register,
     handleSubmit,
@@ -40,19 +39,13 @@ export default function FilmForm({
   } = useForm({
     resolver: yupResolver(filmScheme),
   });
-  const imagemMock = [
-    { label: 'Film', imagem: "usuario" },
-    { label: 'Cliente', imagem: "cliente" },
-    { label: 'Diretor', imagem: "diretor" },
-    { label: 'Ator', imagem: "ator" }
-  ]
 
   const handleFormSubmit = (newFilms: Filmes) => {
     onSubmit(newFilms);
   };
 
   const handleCancel = () => {
-    reset({ titulo: "", lancamento: "" });
+    reset({ titulo: "", sinopse: "" });
     onCancel();
   };
 
@@ -61,7 +54,7 @@ export default function FilmForm({
   }, [filme, reset]);
 
   return (
-    <form style={{ width: "100%" }} onSubmit={handleSubmit(handleFormSubmit)} data-testid="film-form">
+    <form onSubmit={handleSubmit(handleFormSubmit)} data-testid="film-form">
       {errors.map((error) => (
         <Alert key={error} severity="error" style={{ marginBottom: 20 }}>
           {error}
@@ -73,7 +66,6 @@ export default function FilmForm({
         marginTop={1}
         border={1}
         padding={2}
-        spacing={2}
         borderColor={"#7b7b7b"}
         borderRadius={2}
         alignItems="center">

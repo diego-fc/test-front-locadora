@@ -57,7 +57,6 @@ export default function Usuarios() {
 			nome: newUsuario.nome,
 			acesso: newUsuario.acesso
 		}
-		console.log("🚀 ~ file: index.tsx:53 ~ handleFormSubmit ~ usuarioDto:", usuarioDto)
 
 		try {
 			setIsSaving(true);
@@ -94,7 +93,7 @@ export default function Usuarios() {
 	}, [])
 
 	return (
-		<Grid marginTop={4}>
+		<Grid marginTop={8}>
 			<Grid item>
 				<Pages />
 			</Grid>

@@ -25,7 +25,6 @@ export default function UsuarioForm({
   isLoading = false,
   errors = [],
 }: UsuarioFormProps) {
-  console.log("🚀 ~ file: index.tsx:28 ~ usuario:", usuario)
   const {
     register,
     handleSubmit,
@@ -56,7 +55,7 @@ export default function UsuarioForm({
   }, [usuario, reset]);
 
   return (
-    <form style={{ width: "100%" }} onSubmit={handleSubmit(handleFormSubmit)} data-testid="usuario-form">
+    <form onSubmit={handleSubmit(handleFormSubmit)} data-testid="usuario-form">
       {errors.map((error) => (
         <Alert key={error} severity="error" style={{ marginBottom: 20 }}>
           {error}
@@ -68,7 +67,6 @@ export default function UsuarioForm({
         marginTop={1}
         border={1}
         padding={2}
-        spacing={2}
         borderColor={"#7b7b7b"}
         borderRadius={2}
         alignItems="center">
@@ -97,7 +95,7 @@ export default function UsuarioForm({
             />
           </Grid>
           <Grid item md={4} xs={12}>
-          <Controller
+            <Controller
               control={control}
               render={({ field: { value, ref, onChange, ...field } }) => (
                 <Autocomplete

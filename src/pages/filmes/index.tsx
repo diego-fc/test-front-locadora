@@ -98,7 +98,7 @@ export default function Film() {
 	}, [])
 
 	return (
-		<Grid marginTop={4}>
+		<Grid marginTop={8}>
 			<Grid item>
 				<Pages />
 			</Grid>
