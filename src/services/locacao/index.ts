@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 
 export function getLocations(): Promise<AxiosResponse> {
-	return axios.get("http://localhost:3001/location", {
+	return axios.get("https://back-locadora-diego-fc.vercel.app/location", {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -11,7 +11,7 @@ export function getLocations(): Promise<AxiosResponse> {
 }
 
 export function createLocations(body: Locations): Promise<AxiosResponse> {
-	return axios.post("http://localhost:3001/location/create", body, {
+	return axios.post("https://back-locadora-diego-fc.vercel.app/location/create", body, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -20,7 +20,7 @@ export function createLocations(body: Locations): Promise<AxiosResponse> {
 }
 
 export function updateLocations(body: Locations, id: number): Promise<AxiosResponse> {
-	return axios.put(`http://localhost:3001/location/${id}`, body, {
+	return axios.put(`https://back-locadora-diego-fc.vercel.app/location/${id}`, body, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -29,7 +29,7 @@ export function updateLocations(body: Locations, id: number): Promise<AxiosRespo
 }
 
 export function deleteLocations(id: number): Promise<AxiosResponse> {
-	return axios.delete(`http://localhost:3001/location/${id}`, {
+	return axios.delete(`https://back-locadora-diego-fc.vercel.app/location/${id}`, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'

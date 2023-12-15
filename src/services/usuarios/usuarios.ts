@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
 export function getUsuario(): Promise<AxiosResponse> {
-	return axios.get("http://localhost:3001/user", {
+	return axios.get("https://back-locadora-diego-fc.vercel.app/user", {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -10,7 +10,7 @@ export function getUsuario(): Promise<AxiosResponse> {
 }
 
 export function createUsuario(body: Usuario): Promise<AxiosResponse> {
-	return axios.post("http://localhost:3001/user/create", body, {
+	return axios.post("https://back-locadora-diego-fc.vercel.app/user/create", body, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -19,7 +19,7 @@ export function createUsuario(body: Usuario): Promise<AxiosResponse> {
 }
 
 export function updateUsuario(body: Usuario, id: number): Promise<AxiosResponse> {
-	return axios.put(`http://localhost:3001/user/${id}`, body, {
+	return axios.put(`https://back-locadora-diego-fc.vercel.app/user/${id}`, body, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -28,7 +28,7 @@ export function updateUsuario(body: Usuario, id: number): Promise<AxiosResponse>
 }
 
 export function deleteUsuario(id: number): Promise<AxiosResponse> {
-	return axios.delete(`http://localhost:3001/user/${id}`, {
+	return axios.delete(`https://back-locadora-diego-fc.vercel.app/user/${id}`, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'

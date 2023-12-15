@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 
 export function getFilmes(): Promise<AxiosResponse> {
-	return axios.get("http://localhost:3001/film", {
+	return axios.get("https://back-locadora-diego-fc.vercel.app/film", {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -11,7 +11,7 @@ export function getFilmes(): Promise<AxiosResponse> {
 }
 
 export function createFilmes(body: Filmes): Promise<AxiosResponse> {
-	return axios.post("http://localhost:3001/film/create", body, {
+	return axios.post("https://back-locadora-diego-fc.vercel.app/film/create", body, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -20,7 +20,7 @@ export function createFilmes(body: Filmes): Promise<AxiosResponse> {
 }
 
 export function updateFilmes(body: Filmes, id: number): Promise<AxiosResponse> {
-	return axios.put(`http://localhost:3001/film/${id}`, body, {
+	return axios.put(`https://back-locadora-diego-fc.vercel.app/film/${id}`, body, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -29,7 +29,7 @@ export function updateFilmes(body: Filmes, id: number): Promise<AxiosResponse> {
 }
 
 export function deleteFilmes(id: number): Promise<AxiosResponse> {
-	return axios.delete(`http://localhost:3001/film/${id}`, {
+	return axios.delete(`https://back-locadora-diego-fc.vercel.app/film/${id}`, {
 		responseType: 'json',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
