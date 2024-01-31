@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { getUsuario, createUsuario, updateUsuario, deleteUsuario } from "@/services/usuarios/usuarios";
-import UsuarioForm from "./components/Form";
-import DataTable from "./components/DataTable";
-import InfoView from "./components/InfoView";
-import { isAxiosError } from "axios";
+import { createUsuario, deleteUsuario, getUsuario, updateUsuario } from "@/services/usuarios/usuarios";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
+
 import Pages from "../index.page";
+import DataTable from "./components/DataTable";
+import UsuarioForm from "./components/Form";
+import InfoView from "./components/InfoView";
 
 export default function Usuarios() {
 	const [usuarioId, setUsuarioId] = useState<number>();
@@ -19,10 +20,25 @@ export default function Usuarios() {
 	const [errors, setErrors] = useState([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
+	const mockData: Usuario[] = [
+		{
+			id: 1,
+      nome: "Diego Ferreira",
+      email: "diego@ferreira.com",
+			acesso: 'Admin'
+		},
+		{
+			id: 2,
+      nome: "José dos filmes",
+      email: "jose@dosfilmes.com",
+			acesso: 'Usuario',
+		}
+	]
+
 	const getUsers = async () => {
-		await getUsuario().then(({ data }) => {
-			setData(data);
-		})
+		// await getUsuario().then(({ data }) => {
+		// 	setData(data);
+		// })
 	}
 
 	const handleDeleteUsuarioConfirmation = (id: number) => {
@@ -103,7 +119,7 @@ export default function Usuarios() {
 					item xs={10} >
 					<Typography variant="h5">Usuários</Typography>
 				</Grid>
-				{!modalOpen && !modalInfoView ?
+				{/* {!modalOpen && !modalInfoView ?
 					<Grid item xs={2}>
 						<Button
 							variant="contained"
@@ -113,7 +129,7 @@ export default function Usuarios() {
 						</Button>
 					</Grid> :
 					null
-				}
+				} */}
 			</Grid>
 			{modalOpen ?
 				<Grid container={true} alignItems="center">
@@ -141,7 +157,7 @@ export default function Usuarios() {
 			<Grid marginTop={2}>
 				<DataTable
 					loading={isLoading}
-					data={data}
+					data={mockData}
 					onDeleteUsuario={handleDeleteUsuarioConfirmation}
 					onEditUsuario={handleEditUsuario}
 					onViewUsuario={(id: string | number) => {

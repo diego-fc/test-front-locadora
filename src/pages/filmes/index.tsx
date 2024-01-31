@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { getFilmes, createFilmes, deleteFilmes, updateFilmes } from "@/services/filmes";
-import FilmForm from "./components/Form";
-import DataTable from "./components/DataTable";
-import InfoView from "./components/InfoView";
-import { isAxiosError } from "axios";
+import { createFilmes, deleteFilmes, getFilmes, updateFilmes } from "@/services/filmes";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
+
 import Pages from "../index.page";
+import DataTable from "./components/DataTable";
+import CollapsibleTable from "./components/DataTable/collapse";
+import FilmForm from "./components/Form";
+import InfoView from "./components/InfoView";
 
 export default function Film() {
 	const [filmeId, setFilmeId] = useState<number>();
@@ -20,9 +22,9 @@ export default function Film() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const getUsers = async () => {
-		await getFilmes().then(({ data }) => {
-			setData(data);
-		})
+		// await getFilmes().then(({ data }) => {
+		// 	setData(data);
+		// })
 	}
 
 	const handleDeleteFilmConfirmation = (id: number) => {
@@ -108,7 +110,7 @@ export default function Film() {
 					item xs={10} >
 					<Typography variant="h5">Filmes</Typography>
 				</Grid>
-				{!modalOpen && !modalInfoView ?
+				{/* {!modalOpen && !modalInfoView ?
 					<Grid item xs={2}>
 						<Button
 							variant="contained"
@@ -118,7 +120,7 @@ export default function Film() {
 						</Button>
 					</Grid> :
 					null
-				}
+				} */}
 			</Grid>
 			{modalOpen ?
 				<Grid container alignItems="center">
@@ -144,26 +146,7 @@ export default function Film() {
 			}
 
 			<Grid marginTop={2}>
-				<DataTable
-					loading={isLoading}
-					data={data}
-					onDeleteFilm={handleDeleteFilmConfirmation}
-					onEditFilm={handleEditFilm}
-					onViewFilm={(id: string | number) => {
-						setErrors([]);
-						setFilmeView(
-							data.findLast((item) => item.id === id) || ({} as Filmes)
-						);
-						setModalInfoView(true);
-					}}
-					rowCount={data?.length || 0}
-					pagination
-					nitialState={{
-						pagination: { paginationModel: { pageSize: 10 } },
-					}}
-					pageSizeOptions={[10, 25, 50, 100]}
-					paginationMode="server"
-				/>
+				<CollapsibleTable />
 			</Grid>
 			<Dialog
 				open={openDeleteModal}

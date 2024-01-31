@@ -25,10 +25,10 @@ function Header() {
       label: "Filmes",
       onClick: () => router.push("/filmes"),
     },
-    {
-      label: "Locação",
-      onClick: () => router.push('/location'),
-    },
+    // {
+    //   label: "Locação",
+    //   onClick: () => router.push('/location'),
+    // },
   ];
 
   const menuItem = [

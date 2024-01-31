@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import { getLocations, createLocations, deleteLocations, updateLocations } from "@/services/locacao";
-import LocationForm from "./components/Form";
-import DataTable from "./components/DataTable";
-import InfoView from "./components/InfoView";
-import { isAxiosError } from "axios";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
-import Pages from "../index.page";
 import { getFilmes } from "@/services/filmes";
+import { createLocations, deleteLocations, getLocations, updateLocations } from "@/services/locacao";
 import { getUsuario } from "@/services/usuarios/usuarios";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
+
+import Pages from "../index.page";
+import DataTable from "./components/DataTable";
+import LocationForm from "./components/Form";
+import InfoView from "./components/InfoView";
 
 export default function Location() {
 	const [locationId, setLocationId] = useState<number>();
@@ -24,15 +25,15 @@ export default function Location() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const getLocation = async () => {
-		await getLocations().then(({ data }) => {
-			setData(data);
-		})
-		getFilmes().then(({ data }) => {
-			setFilmes(data)
-		})
-		getUsuario().then(({ data }) => {
-			setUsuarios(data)
-		})
+		// await getLocations().then(({ data }) => {
+		// 	setData(data);
+		// })
+		// getFilmes().then(({ data }) => {
+		// 	setFilmes(data)
+		// })
+		// getUsuario().then(({ data }) => {
+		// 	setUsuarios(data)
+		// })
 	}
 
 	const handleDeleteLocationConfirmation = (id: number) => {
